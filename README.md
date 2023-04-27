@@ -3,7 +3,7 @@
 
 This is a sample Android project that demonstrates a typical [Bitrise](https://bitrise.io) CI/CD setup. Build history is publicly available [here](https://app.bitrise.io/app/126b7fcfb72b97b4#/builds).
 
-## Project setup and config
+## Project setup and config - next change
 
 ### Bitrise Workflow
 
