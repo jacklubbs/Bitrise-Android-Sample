@@ -52,7 +52,7 @@ workflows:
     - cache-push@2: {}
   deploy:
     description: >
-      ## How to get a signed APK
+      ## How to get a signed APK, correct
 
 
       This workflow contains the **Sign APK** step. To sign your APK all you
