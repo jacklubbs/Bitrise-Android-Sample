@@ -92,6 +92,8 @@ workflows:
         - arguments: ""
         - cache_level: all
         - variant: debug
+    - script@1:
+        title: Test YML Script
     - android-build-for-ui-testing@0:
         inputs:
         - variant: debug
