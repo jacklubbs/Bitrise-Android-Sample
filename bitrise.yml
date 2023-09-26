@@ -13,10 +13,10 @@ app:
   - VARIANT: ""
   - GRADLEW_PATH: ./gradlew
 workflows:
-  deploy:
+  primary:
     meta:      
       bitrise.io:       
-          machine_type_id: elite-xl
+        machine_type_id: elite-xl
     description: |
       ## How to get a signed APK, correct
 
