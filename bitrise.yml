@@ -21,7 +21,8 @@ stages:
   stage-1:
     workflows:
     - primary: {}
-    - deploy: {}
+    - deploy: 
+        run_if: '{{ getenv "MODULE" | eq "notapp" }}'
 workflows:
   deploy:
     meta:
