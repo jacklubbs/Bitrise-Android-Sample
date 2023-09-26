@@ -74,9 +74,6 @@ app:
     - deploy-to-bitrise-io@2: {}
     - cache-push@2: {}
   primary:
-    meta:      
-      bitrise.io:       
-        machine_type_id: elite-xl
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
