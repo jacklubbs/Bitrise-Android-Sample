@@ -6,7 +6,7 @@ trigger_map:
 - push_branch: "*"
   pipeline: pipeline-runif
 - pull_request_source_branch: "*"
-  workflow: primary
+  workflow: prepare-workflow
 app:
   envs:
   - PROJECT_LOCATION: "."
@@ -17,14 +17,20 @@ pipelines:
   pipeline-runif:
     stages:
     - stage-1: {}
+    - stage-2: {}    
 stages:
   stage-1:
     workflows:
-    - primary: {}
-    - deploy: 
+    - prepare-workflow: {}
+  stage-2:
+    - parallel-test1: 
+        run_if: '{{ getenv "MODULE" | eq "app" }}'
+    - parallel-test2: 
+        run_if: '{{ getenv "MODULE" | eq "notapp" }}'
+    - parallel-test3: 
         run_if: '{{ getenv "MODULE" | eq "notapp" }}'
 workflows:
-  deploy:
+  parallel-test1:
     meta:
       bitrise.io:
         machine_type_id: elite-xl
@@ -50,44 +56,21 @@ workflows:
 
       1. Open the app's build list page
       2. Click on **[Start/Schedule a Build]** button
-      3. Select **deploy** in **Workflow** dropdown input
+      3. Select **parallel-test1** in **Workflow** dropdown input
       4. Click **[Start Build]** button
 
       Or if you need this workflow to be started by a GIT event:
 
       1. Click on **Triggers** tab
-      2. Setup your desired event (push/tag/pull) and select **deploy** workflow
+      2. Setup your desired event (push/tag/pull) and select **parallel-test1** workflow
       3. Click on **[Done]** and then **[Save]** buttons
 
-      The next change in your repository that matches any of your trigger map event will start **deploy** workflow.
+      The next change in your repository that matches any of your trigger map event will start **parallel-test1** workflow.
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6: {}
-    - cache-pull@2: {}
-    - android-lint@0:
-        inputs:
-        - project_location: "$PROJECT_LOCATION"
-        - module: "$MODULE"
-        - variant: release
-    - android-unit-test@1:
-        inputs:
-        - project_location: "$PROJECT_LOCATION"
-        - module: "$MODULE"
-        - variant: release
-    - android-build@0:
-        inputs:
-        - project_location: "$PROJECT_LOCATION"
-        - module: "$MODULE"
-        - build_type: aab
-        - variant: release
-    - sign-apk@1:
-        run_if: '{{getenv "BITRISEIO_ANDROID_KEYSTORE_URL" | ne ""}}'
-        inputs:
-        - use_apk_signer: 'true'
-    - deploy-to-bitrise-io@2: {}
-    - cache-push@2: {}
-  primary:
+  prepare-workflow:
     meta:
       bitrise.io:
         machine_type_id: elite-xl
@@ -95,37 +78,20 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6: {}
-    - cache-pull@2: {}
-    - android-lint@0:
-        inputs:
-        - project_location: "$PROJECT_LOCATION"
-        - module: app
-        - cache_level: all
-        - variant: debug
-    - android-unit-test@1:
-        inputs:
-        - project_location: "$PROJECT_LOCATION"
-        - module: app
-        - arguments: ''
-        - cache_level: all
-        - variant: debug
-    - script@1:
-        title: Test YML Script
-    - android-build-for-ui-testing@0:
-        inputs:
-        - variant: debug
-        - module: app
-    - virtual-device-testing-for-android@1:
-        inputs:
-        - test_type: instrumentation
-        - directories_to_pull: "/sdcard/"
-        - download_test_results: 'true'
-        - environment_variables: |-
-            coverage=true
-            coverageFile=/sdcard/coverage.ec
-        - test_devices: NexusLowRes,29,en,portrait
-    - deploy-to-bitrise-io@2:
-        inputs:
-        - notify_user_groups: none
-    - slack@4: {}
-    - cache-push@2: {}
+  parallel-test2:
+    meta:
+      bitrise.io:
+        machine_type_id: elite-xl
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6: {}
+  parallel-test3:
+    meta:
+      bitrise.io:
+        machine_type_id: elite
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6: {}
+    
