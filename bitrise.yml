@@ -5,7 +5,6 @@ trigger_map:
 - push_branch: '*'
   workflow: primary
 - pull_request_source_branch: '*'
-  workflow: primary
 app:
   envs:
   - PROJECT_LOCATION: .
@@ -13,7 +12,6 @@ app:
   - VARIANT: ""
   - GRADLEW_PATH: ./gradlew
 
-   
     description: |
       ## How to get a signed APK, correct, 2, 3
 
@@ -73,7 +71,10 @@ app:
         - use_apk_signer: "true"
     - deploy-to-bitrise-io@2: {}
     - cache-push@2: {}
-  primary:
+ primary:
+   meta:      
+    bitrise.io:       
+      machine_type_id: elite-xl
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
