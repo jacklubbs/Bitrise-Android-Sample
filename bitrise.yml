@@ -15,7 +15,7 @@ app:
 
    
     description: |
-      ## How to get a signed APK, correct, 2
+      ## How to get a signed APK, correct, 2, 3
 
       This workflow contains the **Sign APK** step. To sign your APK all you have to do is to:
 
