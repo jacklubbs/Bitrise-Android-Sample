@@ -1,19 +1,25 @@
-format_version: "11"
+---
+format_version: '11'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: android
 trigger_map:
-- push_branch: '*'
+- push_branch: "*"
   workflow: primary
-- pull_request_source_branch: '*'
+- pull_request_source_branch: "*"
+  workflow: primary
 app:
   envs:
-  - PROJECT_LOCATION: .
+  - PROJECT_LOCATION: "."
   - MODULE: app
-  - VARIANT: ""
-  - GRADLEW_PATH: ./gradlew
-
+  - VARIANT: ''
+  - GRADLEW_PATH: "./gradlew"
+workflows:
+  deploy:
+    meta:
+      bitrise.io:
+        machine_type_id: elite-xl
     description: |
-      ## How to get a signed APK, correct, 2, 3
+      ## How to get a signed APK, correct
 
       This workflow contains the **Sign APK** step. To sign your APK all you have to do is to:
 
@@ -51,30 +57,27 @@ app:
     - cache-pull@2: {}
     - android-lint@0:
         inputs:
-        - project_location: $PROJECT_LOCATION
-        - module: $MODULE
+        - project_location: "$PROJECT_LOCATION"
+        - module: "$MODULE"
         - variant: release
     - android-unit-test@1:
         inputs:
-        - project_location: $PROJECT_LOCATION
-        - module: $MODULE
+        - project_location: "$PROJECT_LOCATION"
+        - module: "$MODULE"
         - variant: release
     - android-build@0:
         inputs:
-        - project_location: $PROJECT_LOCATION
-        - module: $MODULE
+        - project_location: "$PROJECT_LOCATION"
+        - module: "$MODULE"
         - build_type: aab
         - variant: release
     - sign-apk@1:
         run_if: '{{getenv "BITRISEIO_ANDROID_KEYSTORE_URL" | ne ""}}'
         inputs:
-        - use_apk_signer: "true"
+        - use_apk_signer: 'true'
     - deploy-to-bitrise-io@2: {}
     - cache-push@2: {}
- primary:
-   meta:      
-    bitrise.io:       
-      machine_type_id: elite-xl
+  primary:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -82,15 +85,15 @@ app:
     - cache-pull@2: {}
     - android-lint@0:
         inputs:
-        - project_location: $PROJECT_LOCATION
+        - project_location: "$PROJECT_LOCATION"
         - module: app
         - cache_level: all
         - variant: debug
     - android-unit-test@1:
         inputs:
-        - project_location: $PROJECT_LOCATION
+        - project_location: "$PROJECT_LOCATION"
         - module: app
-        - arguments: ""
+        - arguments: ''
         - cache_level: all
         - variant: debug
     - script@1:
@@ -102,8 +105,8 @@ app:
     - virtual-device-testing-for-android@1:
         inputs:
         - test_type: instrumentation
-        - directories_to_pull: /sdcard/
-        - download_test_results: "true"
+        - directories_to_pull: "/sdcard/"
+        - download_test_results: 'true'
         - environment_variables: |-
             coverage=true
             coverageFile=/sdcard/coverage.ec
