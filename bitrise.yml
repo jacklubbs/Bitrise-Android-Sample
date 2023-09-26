@@ -12,13 +12,13 @@ app:
   - PROJECT_LOCATION: "."
   - MODULE: app
   - VARIANT: ''
-  - GRADLEW_PATH: "./gradlew"
+  - GRADLEW_PATH: "./gradlew"  
 pipelines:  
-  pipeline-run_if:
+  pipeline-runif:
     stages:
     - stage-1: {}
 stages:
-  stage_1:
+  stage-1:
     workflows:
     - Primary: {}
     - deploy: {}
