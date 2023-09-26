@@ -13,6 +13,15 @@ app:
   - MODULE: app
   - VARIANT: ''
   - GRADLEW_PATH: "./gradlew"
+pipelines:  
+  pipeline-run_if:
+    stages:
+    - stage-1: {}
+stages:
+  stage_1:
+    workflows:
+    - Primary: {}
+    - deploy: {}
 workflows:
   deploy:
     meta:
