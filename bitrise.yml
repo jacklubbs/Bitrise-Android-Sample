@@ -16,7 +16,6 @@ workflows:
   deploy:
     meta:      
       bitrise.io:       
-        stack: linux-docker-android-20.04
           machine_type_id: elite-xl
     description: |
       ## How to get a signed APK, correct
