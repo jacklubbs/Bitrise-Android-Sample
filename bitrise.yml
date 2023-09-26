@@ -20,7 +20,7 @@ pipelines:
 stages:
   stage-1:
     workflows:
-    - Primary: {}
+    - primary: {}
     - deploy: {}
 workflows:
   deploy:
