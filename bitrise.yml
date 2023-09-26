@@ -23,6 +23,7 @@ stages:
     workflows:
     - prepare-workflow: {}
   stage-2:
+    workflows:
     - parallel-test1: 
         run_if: '{{ getenv "MODULE" | eq "app" }}'
     - parallel-test2: 
