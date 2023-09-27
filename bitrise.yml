@@ -1,34 +1,33 @@
----
-format_version: '11'
+format_version: "11"
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: android
 trigger_map:
-- push_branch: "*"
+- push_branch: '*'
   pipeline: pipeline-runif
-- pull_request_source_branch: "*"
+- pull_request_source_branch: '*'
   workflow: prepare-workflow
 app:
   envs:
-  - PROJECT_LOCATION: "."
-  - MODULE: p_test1
-  - VARIANT: ''
-  - GRADLEW_PATH: "./gradlew"  
-pipelines:  
+  - PROJECT_LOCATION: .
+  - MODULE: ""
+  - VARIANT: ""
+  - GRADLEW_PATH: ./gradlew
+pipelines:
   pipeline-runif:
     stages:
     - stage-1: {}
-    - stage-2: {}    
+    - stage-2: {}
 stages:
   stage-1:
     workflows:
     - prepare-workflow: {}
   stage-2:
     workflows:
-    - parallel-test1: 
+    - parallel-test1:
         run_if: '{{ getenv "MODULE" | eq "p_test1" }}'
-    - parallel-test2: 
+    - parallel-test2:
         run_if: '{{ getenv "MODULE" | eq "p_test2&3" }}'
-    - parallel-test3: 
+    - parallel-test3:
         run_if: '{{ getenv "MODULE" | eq "p_test2&3" }}'
 workflows:
   parallel-test1:
@@ -95,4 +94,3 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6: {}
-    
