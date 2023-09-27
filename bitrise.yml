@@ -9,7 +9,9 @@ trigger_map:
 app:
   envs:
   - PROJECT_LOCATION: .
-  - MODULE: "p_test1"
+  - MODULE: ""
+    opts:
+      is_expand: false
   - VARIANT: ""
   - GRADLEW_PATH: ./gradlew
 pipelines:
