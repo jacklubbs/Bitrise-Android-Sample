@@ -1,132 +1,105 @@
 ---
-format_version: '17'
-default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
+format_version: '11'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: android
 trigger_map:
-- push_branch: '*'
-  workflow: primary
-- pull_request_source_branch: '*'
-  workflow: primary
+- push_branch: jacklubbs-repo-stored-yml
+  pipeline: pipeline-runif
+- pull_request_source_branch: "*"
+  workflow: prepare-workflow
 app:
   envs:
-  - PROJECT_LOCATION: .
-  - MODULE: app
+  - PROJECT_LOCATION: "."
   - VARIANT: ''
-  - GRADLEW_PATH: ./gradlew
+  - MODULE: "p_test2&3"
+  - GRADLEW_PATH: "./gradlew"
+pipelines:
+  pipeline-runif:
+    stages:
+    - stage-1: {}
+    - stage-2: {}
+stages:
+  stage-1:
+    workflows:
+    - prepare-workflow: {}
+  stage-2:
+    workflows:
+    - parallel-test1:
+        run_if: '{{ getenv "MODULE" | eq "p_test1" }}'
+    - parallel-test2:
+        run_if: '{{ getenv "MODULE" | eq "p_test2&3" }}'
+    - parallel-test3:
+        run_if: '{{ getenv "MODULE" | eq "p_test2&3" }}'
 workflows:
-  primary:
-    steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
-    - cache-pull@2: {}
-    - android-lint@0:
-        inputs:
-        - project_location: $PROJECT_LOCATION
-        - module: app
-        - cache_level: all
-        - variant: debug
-    - android-unit-test@1:
-        inputs:
-        - project_location: $PROJECT_LOCATION
-        - module: app
-        - arguments: ''
-        - cache_level: all
-        - variant: debug
-    - android-build-for-ui-testing@0:
-        inputs:
-        - variant: debug
-        - module: app
-    - virtual-device-testing-for-android@1:
-        inputs:
-        - test_type: instrumentation
-        - directories_to_pull: /sdcard/
-        - download_test_results: 'true'
-        - environment_variables: |-
-            coverage=true
-            coverageFile=/sdcard/coverage.ec
-        - test_devices: 'NexusLowRes,29,en,portrait'
-    - deploy-to-bitrise-io@2:
-        inputs:
-        - notify_user_groups: none
-    - cache-push@2: {}
-  deploy:
-    description: >
-      ## How to get a signed APK
+  parallel-test1:
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-20.04
+        machine_type_id: elite
+    description: |
+      ## How to get a signed APK, correct
 
-
-      This workflow contains the **Sign APK** step. To sign your APK all you
-      have to do is to:
-
+      This workflow contains the **Sign APK** step. To sign your APK all you have to do is to:
 
       1. Click on **Code Signing** tab
-
       1. Find the **ANDROID KEYSTORE FILE** section
-
       1. Click or drop your file on the upload file field
-
       1. Fill the displayed 3 input fields:
        1. **Keystore password**
        1. **Keystore alias**
        1. **Private key password**
       1. Click on **[Save metadata]** button
 
-
-      That's it! From now on, **Sign APK** step will receive your uploaded
-      files.
-
+      That's it! From now on, **Sign APK** step will receive your uploaded files.
 
       ## To run this workflow
 
-
       If you want to run this workflow manually:
 
-
       1. Open the app's build list page
-
       2. Click on **[Start/Schedule a Build]** button
-
-      3. Select **deploy** in **Workflow** dropdown input
-
+      3. Select **parallel-test1** in **Workflow** dropdown input
       4. Click **[Start Build]** button
-
 
       Or if you need this workflow to be started by a GIT event:
 
-
       1. Click on **Triggers** tab
-
-      2. Setup your desired event (push/tag/pull) and select **deploy** workflow
-
+      2. Setup your desired event (push/tag/pull) and select **parallel-test1** workflow
       3. Click on **[Done]** and then **[Save]** buttons
 
-
-      The next change in your repository that matches any of your trigger map
-      event will start **deploy** workflow.
+      The next change in your repository that matches any of your trigger map event will start **parallel-test1** workflow.
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
-    - cache-pull@2: {}
-    - android-lint@0:
-        inputs:
-        - project_location: $PROJECT_LOCATION
-        - module: $MODULE
-        - variant: release
-    - android-unit-test@1:
-        inputs:
-        - project_location: $PROJECT_LOCATION
-        - module: $MODULE
-        - variant: release
-    - android-build@0:
-        inputs:
-        - project_location: $PROJECT_LOCATION
-        - module: $MODULE
-        - build_type: aab
-        - variant: release
-    - sign-apk@1:
-        run_if: '{{getenv "BITRISEIO_ANDROID_KEYSTORE_URL" | ne ""}}'
-        inputs:
-        - use_apk_signer: 'true'
-    - deploy-to-bitrise-io@2: {}
-    - cache-push@2: {}
+    - git-clone@8.1: {}
+  parallel-test2:
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-20.04
+        machine_type_id: elite-xl
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8.1: {}
+  parallel-test3:
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-20.04
+        machine_type_id: elite-xl
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8.1: {}
+  prepare-workflow:
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-20.04
+        machine_type_id: elite-xl
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8.1: {}
+meta:
+  bitrise.io:
+    stack: linux-docker-android-20.04
+    machine_type_id: elite-xl
