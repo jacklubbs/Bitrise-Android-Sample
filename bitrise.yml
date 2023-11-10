@@ -1,4 +1,4 @@
-format_version: "23"
+format_version: "24"
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: android
 trigger_map:
@@ -10,7 +10,7 @@ app:
   envs:
   - PROJECT_LOCATION: .
   - VARIANT: ""
-  - MODULE: "p_test1"
+  - MODULE: "p_test2&3"
   - GRADLEW_PATH: ./gradlew
 pipelines:
   pipeline-runif:
@@ -73,7 +73,7 @@ workflows:
   prepare-workflow:
     meta:
       bitrise.io:
-        machine_type_id: elite-xl
+        machine_type_id: elite
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -81,7 +81,7 @@ workflows:
   parallel-test2:
     meta:
       bitrise.io:
-        machine_type_id: elite-xl
+        machine_type_id: elite
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
