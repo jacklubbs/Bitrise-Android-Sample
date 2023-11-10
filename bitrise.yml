@@ -1,17 +1,18 @@
-format_version: "24"
+---
+format_version: '24'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: android
 trigger_map:
-- push_branch: '*'
+- push_branch: jacklubbs-repo-stored-yml
   pipeline: pipeline-runif
-- pull_request_source_branch: '*'
+- pull_request_source_branch: "*"
   workflow: prepare-workflow
 app:
   envs:
-  - PROJECT_LOCATION: .
-  - VARIANT: ""
+  - PROJECT_LOCATION: "."
+  - VARIANT: ''
   - MODULE: "p_test2&3"
-  - GRADLEW_PATH: ./gradlew
+  - GRADLEW_PATH: "./gradlew"
 pipelines:
   pipeline-runif:
     stages:
@@ -33,6 +34,7 @@ workflows:
   parallel-test1:
     meta:
       bitrise.io:
+        stack: linux-docker-android-20.04
         machine_type_id: elite
     description: |
       ## How to get a signed APK, correct
@@ -69,28 +71,35 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
-  prepare-workflow:
-    meta:
-      bitrise.io:
-        machine_type_id: elite
-    steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@8.1: {}
   parallel-test2:
     meta:
       bitrise.io:
-        machine_type_id: elite
+        stack: linux-docker-android-20.04
+        machine_type_id: elite-xl
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@8.1: {}
   parallel-test3:
     meta:
       bitrise.io:
+        stack: linux-docker-android-20.04
         machine_type_id: elite
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@8.1: {}
+  prepare-workflow:
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-20.04
+        machine_type_id: elite
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8.1: {}
+meta:
+  bitrise.io:
+    stack: linux-docker-android-20.04
+    machine_type_id: elite-xl
