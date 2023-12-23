@@ -89,6 +89,19 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@8.1: {}
+    - script:
+        title: Generate and set new version code
+        inputs:
+        - content: |-
+            #!/bin/bash
+            # Calculate the new version code, e.g., based on the number of git commits
+            NEW_VERSION_CODE=$(git rev-list --count HEAD)
+            
+            # Use envman to add the environment variable so it's available for subsequent steps
+            envman add --key NEW_VERSION_CODE --value "$NEW_VERSION_CODE"
+            
+            # Optional: echo the value for debug logging
+            echo "New version code is: $NEW_VERSION_CODE"
     - bitrise-run@0.9:
         inputs:
         - workflow_id: $workflow_trigger
@@ -98,6 +111,7 @@ workflows:
         - is_enable_public_page: "false"
     envs:
     - workflow_trigger: prepare-workflow
+    
   prepare-workflow:
     meta:
       bitrise.io:
