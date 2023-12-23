@@ -12,7 +12,7 @@ app:
   - PROJECT_LOCATION: "."
   - VARIANT: ''
   - GRADLEW_PATH: "./gradlew"
-  - BITRISE_TRIGGERED_WORKFLOW_ID: primary
+  - MODULE: "p_test2&3" 
 pipelines:
   pipeline-runif:
     stages:
@@ -93,7 +93,7 @@ workflows:
     - android-build@1: {}
     - bitrise-run@0.9:
         inputs:
-        - bitrise_config_path: https://github.com/jacklubbs/gomoduletest/blob/main/bitrise.yml
+        - bitrise_config_path: https://github.com/jacklubbs/Bitrise-Android-Sample/edit/jacklubbs-repo-stored-yml/bitrise.yml
     - deploy-to-bitrise-io@2:
         inputs:
         - is_enable_public_page: 'false'
