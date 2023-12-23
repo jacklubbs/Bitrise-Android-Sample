@@ -93,7 +93,7 @@ workflows:
     - bitrise-run@0.9:
         inputs:
         - workflow_id: $workflow_trigger
-        - bitrise_config_path: https://github.com/jacklubbs/Bitrise-Android-Sample/edit/jacklubbs-repo-stored-yml/bitrise.yml
+        - bitrise_config_path: ./bitrise.yml
     - deploy-to-bitrise-io@2:
         inputs:
         - is_enable_public_page: "false"
