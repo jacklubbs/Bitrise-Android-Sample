@@ -1,18 +1,17 @@
----
-format_version: '13'
+format_version: "13"
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: android
 trigger_map:
 - push_branch: jacklubbs-repo-stored-yml
   pipeline: pipeline-runif
-- pull_request_source_branch: "*"
+- pull_request_source_branch: '*'
   workflow: prepare-workflow
 app:
   envs:
-  - PROJECT_LOCATION: "."
-  - VARIANT: ''
-  - GRADLEW_PATH: "./gradlew"
-  - MODULE: "p_test2&3" 
+  - PROJECT_LOCATION: .
+  - VARIANT: ""
+  - GRADLEW_PATH: ./gradlew
+  - MODULE: p_test2&3
 pipelines:
   pipeline-runif:
     stages:
@@ -93,10 +92,11 @@ workflows:
     - android-build@1: {}
     - bitrise-run@0.9:
         inputs:
+        - workflow_id: $workflow_trigger
         - bitrise_config_path: https://github.com/jacklubbs/Bitrise-Android-Sample/edit/jacklubbs-repo-stored-yml/bitrise.yml
     - deploy-to-bitrise-io@2:
         inputs:
-        - is_enable_public_page: 'false'
+        - is_enable_public_page: "false"
     envs:
     - workflow_trigger: prepare-workflow
   prepare-workflow:
