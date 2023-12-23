@@ -11,7 +11,7 @@ app:
   - PROJECT_LOCATION: .
   - VARIANT: ""
   - GRADLEW_PATH: ./gradlew
-  - MODULE: p_test2&3
+  - MODULE: "p_test2&3"
 pipelines:
   pipeline-runif:
     stages:
