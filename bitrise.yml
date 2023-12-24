@@ -104,8 +104,7 @@ workflows:
         inputs:
         - is_enable_public_page: "false"
     envs:
-    - workflow_trigger: prepare-workflow
-    
+    - workflow_trigger: go_test_module
   prepare-workflow:
     meta:
       bitrise.io:
@@ -122,19 +121,18 @@ workflows:
             #!/bin/bash
             # Get the current date in YYYYMMDD format
             DATE=$(date +%Y%m%d)
-        
+
             # Get the Bitrise build number
             BUILD_NUM=$BITRISE_BUILD_NUMBER
-            
+
             # Combine the date and build number to form the new version code
             NEW_VERSION_CODE="${DATE}${BUILD_NUM}"
-            
+
             # Use envman to add the environment variable so it's available for subsequent steps
             envman add --key NEW_VERSION_CODE --value "$NEW_VERSION_CODE"
-            
+
             # Optional: echo the value for debug logging
             echo "New version code is: $NEW_VERSION_CODE"
-   
 meta:
   bitrise.io:
     stack: linux-docker-android-20.04
