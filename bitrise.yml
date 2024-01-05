@@ -1,17 +1,18 @@
-format_version: "13"
+---
+format_version: '13'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: android
 trigger_map:
 - push_branch: jacklubbs-repo-stored-yml
   pipeline: pipeline-runif
-- pull_request_source_branch: '*'
+- pull_request_source_branch: "*"
   workflow: prepare-workflow
 app:
   envs:
-  - PROJECT_LOCATION: .
-  - VARIANT: ""
-  - GRADLEW_PATH: ./gradlew
-  - MODULE: p_test2&3
+  - PROJECT_LOCATION: "."
+  - VARIANT: ''
+  - GRADLEW_PATH: "./gradlew"
+  - MODULE: p_test2&3&4
 pipelines:
   pipeline-runif:
     stages:
@@ -29,6 +30,8 @@ stages:
         run_if: '{{ getenv "MODULE" | eq "p_test2&3" }}'
     - parallel-test3:
         run_if: '{{ getenv "MODULE" | eq "p_test2&3" }}'
+    - _parallel-test4:
+        run_if: '{{ getenv "MODULE" | eq "p_test2&3&4" }}'
 workflows:
   parallel-test1:
     meta:
@@ -98,11 +101,11 @@ workflows:
             echo "New version code is: $NEW_VERSION_CODE"
     - bitrise-run@0.9:
         inputs:
-        - workflow_id: $workflow_trigger
+        - workflow_id: "$workflow_trigger"
         - bitrise_config_path: https://github.com/jacklubbs/gomoduletest/blob/main/bitrise.yml
     - deploy-to-bitrise-io@2:
         inputs:
-        - is_enable_public_page: "false"
+        - is_enable_public_page: 'false'
     envs:
     - workflow_trigger: go_test_module
   prepare-workflow:
