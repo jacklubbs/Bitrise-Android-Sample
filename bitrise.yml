@@ -1,17 +1,16 @@
----
-format_version: '13'
+format_version: "13"
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: android
 trigger_map:
 - push_branch: jacklubbs-repo-stored-yml
   pipeline: pipeline-runif
-- pull_request_source_branch: "*"
+- pull_request_source_branch: '*'
   workflow: prepare-workflow
 app:
   envs:
-  - PROJECT_LOCATION: "."
-  - VARIANT: ''
-  - GRADLEW_PATH: "./gradlew"
+  - PROJECT_LOCATION: .
+  - VARIANT: ""
+  - GRADLEW_PATH: ./gradlew
   - MODULE: p_test2&3&4
 pipelines:
   pipeline-runif:
@@ -92,20 +91,9 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@8.1: {}
-    - script:
-        title: Generate and set new version code
-        inputs:
-        - content: |-
-            #!/bin/bash
-            # Optional: echo the value for debug logging
-            echo "New version code is: $NEW_VERSION_CODE"
-    - bitrise-run@0.9:
-        inputs:
-        - workflow_id: "$workflow_trigger"
-        - bitrise_config_path: https://github.com/jacklubbs/gomoduletest/blob/main/bitrise.yml
     - deploy-to-bitrise-io@2:
         inputs:
-        - is_enable_public_page: 'false'
+        - is_enable_public_page: "false"
     envs:
     - workflow_trigger: go_test_module
   prepare-workflow:
@@ -136,6 +124,20 @@ workflows:
 
             # Optional: echo the value for debug logging
             echo "New version code is: $NEW_VERSION_CODE"
+  parallel-test4:
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-20.04
+        machine_type_id: elite
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8.1: {}
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: "false"
+    envs:
+    - workflow_trigger: go_test_module
 meta:
   bitrise.io:
     stack: linux-docker-android-20.04
