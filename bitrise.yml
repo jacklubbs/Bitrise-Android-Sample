@@ -27,10 +27,6 @@ stages:
         run_if: '{{ getenv "MODULE" | eq "p_test1" }}'
     - parallel-test2:
         run_if: '{{ getenv "MODULE" | eq "p_test2&3" }}'
-    - parallel-test3:
-        run_if: '{{ getenv "MODULE" | eq "p_test2&3" }}'
-    - parallel-test4:
-        run_if: '{{ getenv "MODULE" | eq "p_test2&3&4" }}'
 workflows:
   parallel-test1:
     meta:
