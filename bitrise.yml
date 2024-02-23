@@ -109,7 +109,7 @@ workflows:
             # Get the current date in YYYYMMDD format
             DATE=$(date +%Y%m%d)
 
-            # Get the Bitrise build number
+            # Get the Bitrise build number 1
             BUILD_NUM=$BITRISE_BUILD_NUMBER
 
             # Combine the date and build number to form the new version code
