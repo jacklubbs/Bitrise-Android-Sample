@@ -1,5 +1,6 @@
 ---
 format_version: '11'
+#testtrigger
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: android
 trigger_map:
