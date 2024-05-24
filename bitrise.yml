@@ -24,7 +24,7 @@ stages:
   stage-2:
     workflows:
     - parallel-test1:
-        run_if: '{{ getenv "MODULE" | eq "p_test1" }}'
+        run_if: '{{enveq "$BITRISE_GIT_BRANCH" "jacklubbs-repo-stored-2-yml"}}'
     - parallel-test2:
         run_if: '{{ getenv "MODULE" | eq "p_test2&3" }}'
 workflows:
