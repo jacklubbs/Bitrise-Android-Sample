@@ -2,7 +2,7 @@ format_version: "9"
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: android
 trigger_map:
-- push_branch: jacklubbs-repo-stored-yml
+- push_branch: jacklubbs-repo-stored-2-yml
   pipeline: pipeline-runif
 - pull_request_source_branch: '*'
   workflow: prepare-workflow
